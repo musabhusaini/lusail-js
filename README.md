@@ -94,8 +94,8 @@ npm install --save lusail
 
 You can pass in the template as a JavaScript or TypeScript object:
 
-``` ts
-import { Lusail } from 'lusail';
+```ts
+import { Lusail, LusailTemplate } from 'lusail';
 
 // Define your Lusail template.
 const template: LusailTemplate = {
@@ -103,7 +103,7 @@ const template: LusailTemplate = {
     { cssSelector: '.title' },
     { get: 'single', index: 0 },
     { get: 'text' },
-  ];
+  ],
 };
 
 // Create a Lusail instance.
@@ -130,6 +130,67 @@ const lusail = Lusail.fromYaml(yamlTemplate);
 
 ``` ts
 const result = await lusail.parseFromString(html);
+```
+
+## Adding Custom Transforms
+
+Lusail-js allows you to extend its functionality by registering custom transformations. These
+additional transformations can then be used in your Lusail templates.
+
+Here's how to create and register a custom plugin:
+
+### 1. Create a custom transformer
+
+Implement a custom transformer that extends the [`Transformer`](./src/transformer.ts) abstract
+class.
+
+``` ts
+import { FieldTransform, Transformer, TransformerFactories } from 'lusail';
+
+export interface MyTransform extends FieldTransform<'mine'> {
+  myOption: any;
+}
+
+export default class MyTransformer extends Transformer<MyTransform> {
+  async execute(input: Element | Element[]): Promise<string | string[]> {
+    // Your transformation logic goes here...
+  }
+}
+```
+
+### 2. Register a custom transformer factory
+
+A custom transformer factory is a function that returns a `Transformer` instance if the given
+`FieldTransform` matches the custom transformation type. To make your custom transformation
+available in Lusail templates, you need to register it using the `TransformerFactories` singleton.
+
+``` ts
+import { TransformerFactories } from 'lusail';
+
+function isMyTransform(transform: FieldTransform): transform is MyTransform {
+  return transform.getBy === 'mine';
+}
+
+TransformerFactories.instance.registerTransform(
+  (transform, options) => {
+    return MyTransformer.isMyTransform(transform)
+      ? new MyTransformer(transform, options)
+      : undefined;
+  },
+  // Optional precedence argument. Factories that claim higher precedence will be chosen over those
+  // with lower precedence in case of conflict.
+  2
+);
+```
+
+### 3. Use the custom transformer in your templates
+
+Now, your custom transformation type can be used in Lusail templates:
+
+``` yaml
+customField:
+  - getBy: mine
+    myOption: <value>
 ```
 
 ## Contributing
