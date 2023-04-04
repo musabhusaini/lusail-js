@@ -1,19 +1,14 @@
 import { JSDOM } from 'jsdom';
 import { parse as parseYaml } from 'yaml';
+import { LusailOptions } from './lusail-options';
 import { LusailResult, LusailTemplate } from './schema';
+import { TransformPipeline } from './transform-pipeline';
 import {
   TransformerFactories,
   TransformerFactory,
 } from './transformer-factories';
-import { TransformPipeline } from './transform-pipeline';
+export * from './lusail-options';
 export { TransformerFactory as TransformFactory };
-
-export type FetchFunction = (url: string) => Promise<string>;
-
-export interface LusailOptions {
-  fetchFunction?: FetchFunction;
-  referenceDate?: Date;
-}
 
 export class Lusail {
   static registerTransform(factory: TransformerFactory) {
@@ -25,10 +20,14 @@ export class Lusail {
     return new Lusail(template, options);
   }
 
-  constructor(
-    private template: LusailTemplate,
-    private options?: LusailOptions,
-  ) {}
+  private options: LusailOptions;
+
+  constructor(private template: LusailTemplate, options?: LusailOptions) {
+    this.options = {
+      logger: console,
+      ...(options ?? {}),
+    };
+  }
 
   async parseFromString(html: string): Promise<LusailResult> {
     const dom = new JSDOM(html);
@@ -60,7 +59,7 @@ export class Lusail {
           result[key] = value;
         }
       } catch (error) {
-        console.warn(
+        this.options.logger?.warn(
           'Warning: Error in transformation pipeline for %s: %s',
           key,
           error,

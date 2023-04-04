@@ -54,7 +54,10 @@ export default class ExtractFieldsTransformer extends Transformer<
       }
       return result;
     } catch (error) {
-      console.warn('Warning: Failed to extract fields from element: %s', error);
+      this.options?.logger?.warn(
+        'Warning: Failed to extract fields from element: %s',
+        error,
+      );
       return undefined;
     }
   }
