@@ -59,3 +59,25 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build
+        run: npm run build
+
+      - name: Set tag name
+        id: set_tag_name
+        run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
+
+      - name: Zip build artifacts
+        run: |
+          mkdir artifacts
+          zip -r artifacts/lusail-${{ steps.set_tag_name.outputs.tag_name }}.zip lib/
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: artifacts/lusail-${{ steps.set_tag_name.outputs.tag_name }}.zip
+          asset_name: lusail-${{ steps.set_tag_name.outputs.tag_name }}.zip
+          asset_content_type: application/zip
