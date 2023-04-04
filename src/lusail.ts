@@ -54,9 +54,17 @@ export class Lusail {
         fieldTemplate,
         this.options,
       );
-      const value = await pipeline.execute(result);
-      if (value !== undefined) {
-        result[key] = value;
+      try {
+        const value = await pipeline.execute(result);
+        if (value !== undefined) {
+          result[key] = value;
+        }
+      } catch (error) {
+        console.warn(
+          'Warning: Error in transformation pipeline for %s: %s',
+          key,
+          error,
+        );
       }
     }
 

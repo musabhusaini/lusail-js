@@ -22,7 +22,7 @@ export default class AttributeTransformer extends Transformer<
     const { attribute } = this.transform;
     return this.applyTransform(
       input,
-      (input) => input?.getAttribute(attribute) ?? '',
+      (element) => element?.getAttribute?.(attribute) ?? '',
     );
   }
 }

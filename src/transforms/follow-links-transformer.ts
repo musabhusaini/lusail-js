@@ -24,6 +24,10 @@ export default class FollowLinksTransformer extends Transformer<
     input: string | string[],
     parentResult: LusailResult,
   ): Promise<LusailResult | LusailResult[] | undefined> {
+    if (!input) {
+      return undefined;
+    }
+
     const { followLinks, hoist } = this.transform;
     const lusail = new Lusail(followLinks, this.options);
 
@@ -43,12 +47,17 @@ export default class FollowLinksTransformer extends Transformer<
     url: string,
     parentResult: LusailResult,
     hoist?: boolean,
-  ) {
-    const result = await lusail.parseFromUrl(url);
-    if (hoist) {
-      return Object.assign(parentResult, result);
+  ): Promise<LusailResult | undefined> {
+    try {
+      const result = await lusail.parseFromUrl(url);
+      if (hoist) {
+        return Object.assign(parentResult, result);
+      }
+      return result;
+    } catch (error) {
+      console.warn('Warning: Failed to fetch url %s: %s', url, error);
+      return undefined;
     }
-    return result;
   }
 }
 

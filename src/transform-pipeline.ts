@@ -23,7 +23,16 @@ export class TransformPipeline {
         transform,
         this.options,
       );
-      currentValues = await transformer.execute(currentValues, parentResult);
+      try {
+        currentValues = await transformer.execute(currentValues, parentResult);
+      } catch (error) {
+        console.warn(
+          'Warning: Error while performing transformation %s: %s',
+          transform,
+          error,
+        );
+        throw error;
+      }
     }
 
     return currentValues;
