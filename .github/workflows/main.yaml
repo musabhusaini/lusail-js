@@ -59,6 +59,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+  update_release:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'release' }}
+    permissions:
+      contents: write
+      packages: write
+    steps:
       - name: Build
         run: npm run build
 
