@@ -48,6 +48,7 @@ const template = `
   - getBy: text
   special:
   - cssSelector: .special
+  - getBy: single
   - fields:
       specialTitle:
       - cssSelector: .title
@@ -63,7 +64,7 @@ const template = `
       - getBy: text
       - castTo: date
         format: "MM/dd/yyyy HH:mm"
-    hoist: true
+  - getBy: hoisting
   posts:
   - cssSelector: .post
   - fields:

@@ -107,10 +107,6 @@ export interface ExtractFieldsTransform extends FieldTransform<'fields'> {
    * The LusailTemplate for extracting fields.
    */
   fields: LusailTemplate;
-  /**
-   * When true, hoists fields to the parent result instead of creating a nested result.
-   */
-  hoist?: boolean;
 }
 
 /**
@@ -123,10 +119,6 @@ export interface FollowLinksTransform
    * The LusailTemplate to apply to the linked content.
    */
   followLinks: LusailTemplate;
-  /**
-   * When true, hoists fields to the parent result instead of creating a nested result.
-   */
-  hoist?: boolean;
 }
 
 /**
@@ -137,4 +129,11 @@ export interface LiteralTransform extends FieldTransform<'literal'> {
    * The fixed literal value.
    */
   literal: any;
+}
+
+/**
+ * Represents a hoist transform that hoists a nested field to the top level of the result.
+ */
+export interface HoistTransform extends FieldTransform<'hoist' | 'hoisting'> {
+  getBy: 'hoist' | 'hoisting';
 }
