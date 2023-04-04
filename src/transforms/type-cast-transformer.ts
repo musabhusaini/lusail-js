@@ -25,7 +25,7 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
       try {
         return this.castValue(value, valueType);
       } catch (error) {
-        console.warn(
+        this.options?.logger?.warn(
           'Warning: Failed to cast value %s to %s: %s',
           value,
           valueType,

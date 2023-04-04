@@ -55,7 +55,11 @@ export default class FollowLinksTransformer extends Transformer<
       }
       return result;
     } catch (error) {
-      console.warn('Warning: Failed to fetch url %s: %s', url, error);
+      this.options?.logger?.warn(
+        'Warning: Failed to fetch url %s: %s',
+        url,
+        error,
+      );
       return undefined;
     }
   }
