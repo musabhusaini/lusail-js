@@ -82,15 +82,16 @@ Applying the above template to the given HTML document will produce:
 
 This library is a TypeScript/JavaScript parser for the Lusail language.
 
-### Installation
+## Installation
 
 ``` sh
 npm install --save lusail
 ```
 
-### Usage
 
-#### 1. Create Lusail instance
+## Usage
+
+### 1. Create Lusail instance
 
 You can pass in the template as a JavaScript or TypeScript object:
 
@@ -126,7 +127,7 @@ pageTitle:
 const lusail = Lusail.fromYaml(yamlTemplate);
 ```
 
-#### 2. Parse
+### 2. Parse
 
 ``` ts
 const result = await lusail.parseFromString(html);
@@ -162,16 +163,16 @@ export default class MyTransformer extends Transformer<MyTransform> {
 
 A custom transformer factory is a function that returns a `Transformer` instance if the given
 `FieldTransform` matches the custom transformation type. To make your custom transformation
-available in Lusail templates, you need to register it using the `TransformerFactories` singleton.
+available in Lusail templates, you need to register it with `Lusail`.
 
 ``` ts
-import { TransformerFactories } from 'lusail';
+import { Lusail } from 'lusail';
 
 function isMyTransform(transform: FieldTransform): transform is MyTransform {
   return transform.getBy === 'mine';
 }
 
-TransformerFactories.instance.registerTransform(
+Lusail.registerTransform(
   (transform, options) => {
     return MyTransformer.isMyTransform(transform)
       ? new MyTransformer(transform, options)
@@ -192,6 +193,14 @@ customField:
   - getBy: mine
     myOption: <value>
 ```
+
+## ⚠️ Development Status
+
+Please note that Lusail is still under development and has not been thoroughly tested. As such, its
+use in production environments is not yet recommended. Also note that while we will attempt to
+follow semantic versioning for the library, there might be breaking changes between minor versions
+from time to time until we reach a stable state. Please report any issues you encounter and/or
+[submit a pull request](./CONTRIBUTING.md) so we can make the library better.
 
 ## Contributing
 
