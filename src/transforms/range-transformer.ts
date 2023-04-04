@@ -21,7 +21,7 @@ export default class RangeTransformer extends Transformer<
   }
 
   async execute(input: any[]): Promise<any[] | undefined> {
-    const { start = 0, end } = this.transform;
+    const { start = undefined, end = undefined } = this.transform;
     return input?.slice(start, end);
   }
 }
