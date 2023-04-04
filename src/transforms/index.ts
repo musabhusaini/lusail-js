@@ -5,6 +5,7 @@ export * from './date-transformer';
 export * from './element-text-transformer';
 export * from './extract-fields-transformer';
 export * from './follow-links-transformer';
+export * from './hoist-transformer';
 export * from './literal-transformer';
 export * from './range-transformer';
 export * from './regex-transformer';

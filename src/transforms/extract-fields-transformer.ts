@@ -21,38 +21,27 @@ export default class ExtractFieldsTransformer extends Transformer<
 
   async execute(
     input: Element | Element[],
-    parentResult: LusailResult,
   ): Promise<LusailResult | LusailResult[] | undefined> {
     if (!input) {
       return undefined;
     }
 
-    const { fields, hoist } = this.transform;
+    const { fields } = this.transform;
     const lusail = new Lusail(fields, this.options);
 
-    const promisedResult = isArray(input)
+    return isArray(input)
       ? Promise.all(
-          input?.map((element) =>
-            this.transformElement(lusail, element, parentResult, hoist),
-          ),
+          input?.map((element) => this.transformElement(lusail, element)),
         )
-      : this.transformElement(lusail, input, parentResult, hoist);
-    const result = await promisedResult;
-    return hoist ? undefined : result;
+      : this.transformElement(lusail, input);
   }
 
   private async transformElement(
     lusail: Lusail,
     element: Element,
-    parentResult: LusailResult,
-    hoist?: boolean,
   ): Promise<LusailResult | undefined> {
     try {
-      const result = await lusail.parseFromElement(element);
-      if (hoist) {
-        return Object.assign(parentResult, result);
-      }
-      return result;
+      return lusail.parseFromElement(element);
     } catch (error) {
       this.options?.logger?.warn(
         'Warning: Failed to extract fields from element: %s',
