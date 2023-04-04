@@ -20,9 +20,9 @@ export default class RangeTransformer extends Transformer<
     );
   }
 
-  async execute(input: any[]): Promise<any[]> {
+  async execute(input: any[]): Promise<any[] | undefined> {
     const { start = 0, end } = this.transform;
-    return input.slice(start, end);
+    return input?.slice(start, end);
   }
 }
 

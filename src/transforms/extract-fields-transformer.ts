@@ -23,12 +23,16 @@ export default class ExtractFieldsTransformer extends Transformer<
     input: Element | Element[],
     parentResult: LusailResult,
   ): Promise<LusailResult | LusailResult[] | undefined> {
+    if (!input) {
+      return undefined;
+    }
+
     const { fields, hoist } = this.transform;
     const lusail = new Lusail(fields, this.options);
 
     const promisedResult = isArray(input)
       ? Promise.all(
-          input.map((element) =>
+          input?.map((element) =>
             this.transformElement(lusail, element, parentResult, hoist),
           ),
         )
@@ -42,12 +46,17 @@ export default class ExtractFieldsTransformer extends Transformer<
     element: Element,
     parentResult: LusailResult,
     hoist?: boolean,
-  ): Promise<LusailResult> {
-    const result = await lusail.parseFromElement(element);
-    if (hoist) {
-      return Object.assign(parentResult, result);
+  ): Promise<LusailResult | undefined> {
+    try {
+      const result = await lusail.parseFromElement(element);
+      if (hoist) {
+        return Object.assign(parentResult, result);
+      }
+      return result;
+    } catch (error) {
+      console.warn('Warning: Failed to extract fields from element: %s', error);
+      return undefined;
     }
-    return result;
   }
 }
 

@@ -7,7 +7,7 @@ import { CssSelectorTransform } from './transforms';
 export default class CssSelectorTransformer extends Transformer<
   CssSelectorTransform,
   Element | Element[],
-  Element | Element[]
+  Element[]
 > {
   static isCssSelectorTransform(
     transform: FieldTransform,
@@ -18,19 +18,24 @@ export default class CssSelectorTransformer extends Transformer<
     );
   }
 
-  async execute(input: Element | Element[]): Promise<Element | Element[]> {
-    const { cssSelector: selector } = this.transform;
+  async execute(input: Element | Element[]): Promise<Element[]> {
     if (!isArray(input)) {
-      return Array.from(input?.querySelectorAll(selector));
+      return this.transformElement(input);
     }
 
     const results: Element[] = [];
     input.forEach((element) => {
-      const selectedElements = Array.from(element.querySelectorAll(selector));
+      const selectedElements = this.transformElement(element);
       results.push(...selectedElements);
     });
 
     return results;
+  }
+
+  private transformElement(element: Element): Element[] {
+    return Array.from(
+      element?.querySelectorAll?.(this.transform.cssSelector) ?? [],
+    );
   }
 }
 

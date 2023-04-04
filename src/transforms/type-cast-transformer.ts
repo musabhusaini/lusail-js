@@ -19,11 +19,21 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
     );
   }
 
-  async execute(input: I): Promise<O> {
+  async execute(input: I): Promise<O | undefined> {
     const { castTo: valueType } = this.transform;
-    return this.applyTransform(input, (value) =>
-      this.castValue(value, valueType),
-    );
+    return this.applyTransform(input, (value) => {
+      try {
+        return this.castValue(value, valueType);
+      } catch (error) {
+        console.warn(
+          'Warning: Failed to cast value %s to %s: %s',
+          value,
+          valueType,
+          error,
+        );
+        return undefined;
+      }
+    });
   }
 
   protected castValue(value: any, type: FieldType): any {

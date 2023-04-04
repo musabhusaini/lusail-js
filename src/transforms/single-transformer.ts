@@ -20,7 +20,7 @@ export default class SingleTransformer extends Transformer<
 
   async execute(input: any[]): Promise<any> {
     const { index = 0 } = this.transform;
-    return input[index];
+    return input?.[index];
   }
 }
 
