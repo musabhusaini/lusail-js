@@ -1,0 +1,11 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "exclude": ["**/*.test.ts"],
+  "out": "docs",
+  "name": "Lusail",
+  "readme": "README.md",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "plugin": ["typedoc-plugin-versions"]
+}
