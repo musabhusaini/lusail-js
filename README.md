@@ -194,6 +194,10 @@ customField:
     myOption: <value>
 ```
 
+## Documentation
+
+Please see [API Documentation](http://musabhusaini.github.io/lusail-js) for more details.
+
 ## ⚠️ Development Status
 
 Please note that Lusail is still under development and has not been thoroughly tested. As such, its
