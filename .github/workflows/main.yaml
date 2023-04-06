@@ -136,12 +136,16 @@ jobs:
       - name: Dereference symbolic links
         run: .github/scripts/dereference-symlinks.sh ./docs
 
+      - name: Set tag name
+        id: set_tag_name
+        run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
+
       - name: Commit updated documentation
         run: |
           git config --global user.email "<$(git log -n 1 --pretty=format:%ae)>"
           git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git add .
-          git commit -m "Update documentation"
+          git commit -m "Update documentation for ${{ steps.set_tag_name.outputs.tag_name }}"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
