@@ -109,8 +109,17 @@ jobs:
       contents: write
       pages: write
     steps:
-      - name: Checkout code
+      - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+
+      - name: Merge main branch
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git merge origin/main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -123,9 +132,15 @@ jobs:
       - name: Build documentation
         run: npm run docs
 
-      - name: Deploy to GitHub Pages
+      - name: Dereference symbolic links
+        run: .github/scripts/dereference-symlinks.sh ./docs
+
+      - name: Commit updated documentation
         run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          npm run docs:deploy -- -u "$(git log -n 1 --pretty=format:%an) <$(git log -n 1 --pretty=format:%ae)>"
+          git config --global user.email "<$(git log -n 1 --pretty=format:%ae)>"
+          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
+          git add .
+          git commit -m "Update documentation"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
