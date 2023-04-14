@@ -66,14 +66,12 @@ export class Lusail {
    *
    * @param url - The URL of the HTML page to fetch and parse.
    * @returns A promise that resolves to a `LusailResult` object.
-   * @throws An error if `fetchFunction` is not defined.
    */
   async parseFromUrl(url: string): Promise<LusailResult> {
-    if (!this.options?.fetchFunction) {
-      throw new Error('fetchFunction is not defined');
-    }
-
-    const html = await this.options?.fetchFunction(url);
+    const fetchFunction =
+      this.options?.fetchFunction ??
+      (async (url) => fetch(url).then((response) => response.text()));
+    const html = await fetchFunction(url);
     return this.parseFromString(html);
   }
 
