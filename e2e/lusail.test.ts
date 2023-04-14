@@ -3,6 +3,19 @@ import { describe, expect, test } from '@jest/globals';
 import { Lusail } from '@lusail/index';
 import { parse, subDays, subHours } from 'date-fns';
 
+const subPages: Record<string, string> = {
+  'http://link1.com': `
+  <html>
+    <title>Link 1</title>
+  </html>
+  `,
+  'http://link2.com': `
+  <html>
+    <title>Link 2</title>
+  </html>
+  `,
+};
+
 const exampleHtml = `
 <html>
   <head>
@@ -16,11 +29,13 @@ const exampleHtml = `
       <h2 class="title">Post 1</h2>
       <p class="content">This is the content of post 1.</p>
       <p class="publishedAt">8 hours ago</p>
+      <a href="http://link1.com"></a>
     </div>
     <div class="post">
       <h2 class="title">Post 2</h2>
       <p class="content">This is the content of post 2.</p>
       <p class="publishedAt">2 days ago</p>
+      <a href="http://link2.com"></a>
     </div>
     <div class="special">
       <h2 class="title">Special Post 1</h2>
@@ -82,6 +97,16 @@ const template = `
       - getBy: text
       - castTo: date
         format: timeAgo
+      links:
+      - cssSelector: a
+      - getBy: single
+      - attribute: href
+      - followLinks:
+          subTitle:
+          - cssSelector: title
+          - getBy: single
+          - getBy: text
+      - getBy: hoisting
 `;
 
 describe('Lusail', () => {
@@ -93,6 +118,7 @@ describe('Lusail', () => {
     );
     const lusail = Lusail.fromYaml(template, {
       referenceDate: referenceDate,
+      fetchFunction: (url) => Promise.resolve(subPages[url]),
     });
     const dom = new JSDOM(exampleHtml);
     const result = await lusail.parseFromElement(dom);
@@ -111,11 +137,13 @@ describe('Lusail', () => {
           title: 'Post 1',
           content: 'This is the content of post 1.',
           publishedAt: subHours(referenceDate, 8),
+          subTitle: 'Link 1',
         },
         {
           title: 'Post 2',
           content: 'This is the content of post 2.',
           publishedAt: subDays(referenceDate, 2),
+          subTitle: 'Link 2',
         },
       ],
     };
