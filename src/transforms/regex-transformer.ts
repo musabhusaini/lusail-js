@@ -20,8 +20,11 @@ export default class RegexTransformer extends Transformer<
 
   async execute(input: string | string[]): Promise<string | string[]> {
     const { regex } = this.transform;
-    const re = typeof regex === 'string' ? new RegExp(regex) : regex;
+    const re = typeof regex === 'string' ? new RegExp(regex, 'g') : regex;
     return this.applyTransform(input, (value) => {
+      if (!re.test(value ?? '')) {
+        return '';
+      }
       return value?.replace(re, this.transform.replaceWith ?? '$0') ?? '';
     });
   }

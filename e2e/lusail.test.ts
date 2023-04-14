@@ -87,6 +87,13 @@ const template = `
       - cssSelector: .title
       - getBy: single
       - getBy: text
+      index:
+      - cssSelector: .title
+      - getBy: single
+      - getBy: text
+      - regex: "^Post (\\\\d+)$"
+        replaceWith: "$1"
+      - castTo: number
       content:
       - cssSelector: .content
       - getBy: single
@@ -135,12 +142,14 @@ describe('Lusail', () => {
       posts: [
         {
           title: 'Post 1',
+          index: 1,
           content: 'This is the content of post 1.',
           publishedAt: subHours(referenceDate, 8),
           subTitle: 'Link 1',
         },
         {
           title: 'Post 2',
+          index: 2,
           content: 'This is the content of post 2.',
           publishedAt: subDays(referenceDate, 2),
           subTitle: 'Link 2',

@@ -10,7 +10,6 @@ export * from './literal-transformer';
 export * from './range-transformer';
 export * from './regex-transformer';
 export * from './single-transformer';
-export * from './transforms';
 export * from './type-cast-transformer';
 
 export function registerAll() {
