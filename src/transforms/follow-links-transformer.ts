@@ -1,8 +1,8 @@
-import { TransformerFactories } from '@lusail/transformer-factories';
 import { isArray, isUndefined } from 'lodash';
 import { Lusail } from '../lusail';
 import { FieldTransform, LusailResult } from '../schema';
 import { Transformer } from '../transformer';
+import { TransformerFactories } from '../transformer-factories';
 import { FollowLinksTransform } from './transforms';
 
 export default class FollowLinksTransformer extends Transformer<
