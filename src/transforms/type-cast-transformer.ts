@@ -14,7 +14,7 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
     transform: FieldTransform,
   ): transform is TypeCastTransform {
     return (
-      (transform.getBy === 'cast' ?? 'cast') &&
+      (transform.getBy ?? 'cast') == 'cast' &&
       !isUndefined((transform as TypeCastTransform).castTo)
     );
   }
