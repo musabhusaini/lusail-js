@@ -114,8 +114,15 @@ jobs:
         with:
           ref: gh-pages
 
+      - name: Set repository user
+        run: |
+          git config --global user.email "<$(git log -n 1 --pretty=format:%ae)>"
+          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
+
       - name: Merge release tag
-        run: git merge ${GITHUB_REF}
+        run: |
+          git fetch origin ${{ github.ref }}
+          git merge --no-edit FETCH_HEAD
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -137,8 +144,6 @@ jobs:
 
       - name: Commit updated documentation
         run: |
-          git config --global user.email "<$(git log -n 1 --pretty=format:%ae)>"
-          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git add .
           git commit -m "Update documentation for ${{ steps.set_tag_name.outputs.tag_name }}"
           git push
