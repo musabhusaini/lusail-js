@@ -3,6 +3,17 @@
 JavaScript implementation of Lusail, a domain-specific language for extracting structured data from
 HTML.
 
+<!-- toc -->
+- [What is Lusail?](#what-is-lusail)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Supported Transforms](#supported-transforms)
+- [Adding Custom Transforms](#adding-custom-transforms)
+- [Documentation](#documentation)
+- [Development Status](#development-status)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## What is Lusail?
 
 Lusail is an extensible domain-specific language designed to make it easy to express the structure
@@ -91,9 +102,7 @@ npm install --save lusail
 
 ## Usage
 
-### 1. Create Lusail instance
-
-You can pass in the template as a JavaScript or TypeScript object:
+Create a `Lusail` instance by passing in a template as a JavaScript or TypeScript object:
 
 ```ts
 import { Lusail, LusailTemplate } from 'lusail';
@@ -127,11 +136,129 @@ pageTitle:
 const lusail = Lusail.fromYaml(yamlTemplate);
 ```
 
-### 2. Parse
+Then parse your HTML as a string:
 
 ``` ts
 const result = await lusail.parseFromString(html);
 ```
+
+Or let it fetch the HTML from a URL:
+
+``` ts
+const result = await lusail.parseFromUrl(url);
+```
+
+## Supported Transforms
+
+### Single
+
+Retrieves a single element from an array by index.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | If `index` is not defined | `single` |
+| `index` | The index to pick | If `getBy` is not specified | `0` |
+
+### Range
+
+Retrieves a range of elements by start and end indexes.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | If none of the other properties are provided | `range` |
+| `start` | The starting index of the range | If none of the other properties are provided | `0` |
+| `end` | The ending index of the range | If none of the other properties are provided | End of the input array |
+
+### CSS Selector
+
+Retrieves elements matching the given selector.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `cssSelector` |
+| `cssSelector` | The CSS selector to match elements | Yes | - |
+
+### Element Text
+
+Retrieves the text content of input element(s).
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Triggers this transform | Yes | `text` |
+
+### Attribute
+
+Retrieves the value of the specified attribute of input element(s).
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `attribute` |
+| `attribute` | The name of the attribute to retrieve | Yes | - |
+
+### Cast
+
+Casts incoming value(s) to a target type.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `cast` |
+| `castTo` | The field type to cast the value to | Yes | - |
+
+### Date
+
+Casts incoming value(s) to date(s), using an optional format and locale.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `cast` |
+| `castTo` | The field type to cast the value to | Yes | `date` |
+| `format` | The [format](https://date-fns.org/v2.29.3/docs/format) of the date string or `'timeAgo'` for relative time | No | [ISO 8601 format](https://date-fns.org/v2.29.3/docs/parseISO) |
+| `locale` | The locale to be used when parsing the date | No | - |
+
+### Regex
+
+Applies a regular expression substitution to the input value(s).
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `regex` |
+| `regex` | The regex pattern to apply | Yes | - |
+| `replaceWith` | The string to replace matched patterns with | No | `'$1'` |
+
+### Extract Fields
+
+Extracts fields by applying a sub-template to the input.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `fields` |
+| `fields` | The LusailTemplate for extracting fields | Yes | - |
+
+### Follow Links
+
+Follows links from input strings and extracts fields given by a sub-template.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` |	Explicitly triggers this transform | No | `followingLinks`, `followLinks`, or `links` |
+| `followLinks` | The LusailTemplate to apply to the linked content | Yes | - |
+
+### Literal
+
+Transforms the input(s) a fixed literal value.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `literal` |
+| `literal` | The fixed literal value | Yes | - |
+
+### Hoist
+
+Hoists nested fields to the top level of the result
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Triggers this transform | Yes | `hoist` or `hoisting` |
 
 ## Adding Custom Transforms
 
@@ -194,7 +321,11 @@ customField:
     myOption: <value>
 ```
 
-## ⚠️ Development Status
+## Documentation
+
+See [API Documentation](http://musabhusaini.github.io/lusail-js) for more details.
+
+## Development Status
 
 Please note that Lusail is still under development and has not been thoroughly tested. As such, its
 use in production environments is not yet recommended. Also note that while we will attempt to

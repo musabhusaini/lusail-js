@@ -26,7 +26,7 @@ export interface RangeTransform extends FieldTransform<'range'> {
 }
 
 /**
- * Represents a CSS selector transform that retrieves elements matching the given selector.
+ * Represents a transform that retrieves elements matching the given selector.
  */
 export interface CssSelectorTransform extends FieldTransform<'cssSelector'> {
   /**
@@ -36,14 +36,14 @@ export interface CssSelectorTransform extends FieldTransform<'cssSelector'> {
 }
 
 /**
- * Represents an element text transform that retrieves the text content of an element.
+ * Represents a transform that retrieves the text content of an element.
  */
 export interface ElementTextTransform extends FieldTransform<'text'> {
   getBy: 'text';
 }
 
 /**
- * Represents an attribute transform that retrieves the value of the specified attribute of an
+ * Represents a transform that retrieves the value of the specified attribute of an
  * element.
  */
 export interface AttributeTransform extends FieldTransform<'attribute'> {
@@ -59,7 +59,7 @@ export interface AttributeTransform extends FieldTransform<'attribute'> {
 export type FieldType = 'string' | 'number' | 'boolean' | 'date';
 
 /**
- * Represents a type cast transform that casts the value to the specified field type.
+ * Represents a transform that casts the value to the specified field type.
  */
 export interface TypeCastTransform extends FieldTransform<'cast'> {
   /**
@@ -69,7 +69,7 @@ export interface TypeCastTransform extends FieldTransform<'cast'> {
 }
 
 /**
- * Represents a date transform that casts a value to a date with an optional format and locale.
+ * Represents a transform that casts a value to a date with an optional format and locale.
  */
 export interface DateTransform extends TypeCastTransform {
   castTo: 'date';
@@ -86,7 +86,7 @@ export interface DateTransform extends TypeCastTransform {
 }
 
 /**
- * Represents a regex transform that applies a regex pattern and optional replacement to a value.
+ * Represents a transform that applies a regex pattern and optional replacement to a value.
  */
 export interface RegexTransform extends FieldTransform<'regex'> {
   /**
@@ -100,7 +100,7 @@ export interface RegexTransform extends FieldTransform<'regex'> {
 }
 
 /**
- * Represents an extract fields transform that extracts multiple fields from a value.
+ * Represents a transform that extracts multiple fields from a value.
  */
 export interface ExtractFieldsTransform extends FieldTransform<'fields'> {
   /**
@@ -110,7 +110,7 @@ export interface ExtractFieldsTransform extends FieldTransform<'fields'> {
 }
 
 /**
- * Represents a follow links transform that follows links and applies a LusailTemplate to the linked
+ * Represents a transform that follows links and applies a LusailTemplate to the linked
  * content.
  */
 export interface FollowLinksTransform
@@ -122,7 +122,7 @@ export interface FollowLinksTransform
 }
 
 /**
- * Represents a literal transform that transforms the input to a fixed literal value.
+ * Represents a transform that transforms the input to a fixed literal value.
  */
 export interface LiteralTransform extends FieldTransform<'literal'> {
   /**
@@ -132,7 +132,7 @@ export interface LiteralTransform extends FieldTransform<'literal'> {
 }
 
 /**
- * Represents a hoist transform that hoists a nested field to the top level of the result.
+ * Represents a transform that hoists nested fields to the top level of the result.
  */
 export interface HoistTransform extends FieldTransform<'hoist' | 'hoisting'> {
   getBy: 'hoist' | 'hoisting';

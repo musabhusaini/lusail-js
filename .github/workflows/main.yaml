@@ -114,13 +114,15 @@ jobs:
         with:
           ref: gh-pages
 
-      - name: Merge main branch
+      - name: Set repository user
         run: |
-          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git fetch origin
-          git merge origin/main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config --global user.email "<$(git log -n 1 --pretty=format:%ae)>"
+          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
+
+      - name: Merge release tag
+        run: |
+          git fetch origin ${{ github.ref }}
+          git merge --no-edit FETCH_HEAD
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -136,12 +138,14 @@ jobs:
       - name: Dereference symbolic links
         run: .github/scripts/dereference-symlinks.sh ./docs
 
+      - name: Set tag name
+        id: set_tag_name
+        run: echo "::set-output name=tag_name::${GITHUB_REF#refs/tags/}"
+
       - name: Commit updated documentation
         run: |
-          git config --global user.email "<$(git log -n 1 --pretty=format:%ae)>"
-          git config --global user.name "$(git log -n 1 --pretty=format:%an)"
           git add .
-          git commit -m "Update documentation"
+          git commit -m "Update documentation for ${{ steps.set_tag_name.outputs.tag_name }}"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
