@@ -5,6 +5,12 @@
 export type FetchFunction = (url: string) => Promise<string>;
 
 /**
+ * Represents a function that takes html input as string and deserializes it into an `Element`
+ * object.
+ */
+export type HtmlDeserializer = (html: string) => Element;
+
+/**
  * Defines a logger with various log level methods for logging messages and errors during Lusail
  * operations.
  */
@@ -56,4 +62,9 @@ export interface LusailOptions {
    * console is used for logging.
    */
   logger?: LusailLogger;
+
+  /**
+   * An optional function for deserializing HTML. By default, JSDOM is used for deserialization.
+   */
+  htmlDeserializer?: HtmlDeserializer;
 }
