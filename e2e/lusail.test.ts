@@ -1,4 +1,3 @@
-import { JSDOM } from 'jsdom';
 import { describe, expect, test } from '@jest/globals';
 import { Lusail } from '@lusail/index';
 import { parse, subDays, subHours } from 'date-fns';
@@ -16,7 +15,7 @@ const subPages: Record<string, string> = {
   `,
 };
 
-const exampleHtml = `
+const testHtml = `
 <html>
   <head>
     <title>Sample page</title>
@@ -127,8 +126,7 @@ describe('Lusail', () => {
       referenceDate: referenceDate,
       fetchFunction: (url) => Promise.resolve(subPages[url]),
     });
-    const dom = new JSDOM(exampleHtml);
-    const result = await lusail.parseFromElement(dom);
+    const result = await lusail.parseFromString(testHtml);
 
     const expectedResult = {
       pageTitle: 'Sample page',

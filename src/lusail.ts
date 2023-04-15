@@ -35,7 +35,7 @@ export class Lusail {
     return new Lusail(template, options);
   }
 
-  private options: LusailOptions;
+  private options: Required<LusailOptions>;
 
   /**
    * Constructs a new Lusail instance.
@@ -46,6 +46,9 @@ export class Lusail {
   constructor(private template: LusailTemplate, options?: LusailOptions) {
     this.options = {
       logger: console,
+      htmlDeserializer: this.defaultHtmlDeserializer,
+      referenceDate: new Date(),
+      fetchFunction: this.defaultFetchFunction,
       ...(options ?? {}),
     };
   }
@@ -57,7 +60,7 @@ export class Lusail {
    * @returns A promise that resolves to a `LusailResult` object.
    */
   async parseFromString(html: string): Promise<LusailResult> {
-    const dom = new JSDOM(html);
+    const dom = this.options.htmlDeserializer(html);
     return this.parseFromElement(dom);
   }
 
@@ -68,10 +71,7 @@ export class Lusail {
    * @returns A promise that resolves to a `LusailResult` object.
    */
   async parseFromUrl(url: string): Promise<LusailResult> {
-    const fetchFunction =
-      this.options?.fetchFunction ??
-      (async (url) => fetch(url).then((response) => response.text()));
-    const html = await fetchFunction(url);
+    const html = await this.options.fetchFunction(url);
     return this.parseFromString(html);
   }
 
@@ -80,9 +80,8 @@ export class Lusail {
    *
    * @param url - The URL of the HTML page to fetch and parse.
    * @returns A promise that resolves to a `LusailResult` object.
-   * @throws An error if `fetchFunction` is not defined.
    */
-  async parseFromElement(element: JSDOM | Element): Promise<LusailResult> {
+  async parseFromElement(element: Element): Promise<LusailResult> {
     const result: LusailResult = {};
 
     for (const key in this.template) {
@@ -107,5 +106,14 @@ export class Lusail {
     }
 
     return result;
+  }
+
+  private async defaultFetchFunction(url: string): Promise<string> {
+    const response = await fetch(url);
+    return response.text();
+  }
+
+  private defaultHtmlDeserializer(html: string): Element {
+    return new JSDOM(html).window.document.documentElement;
   }
 }
