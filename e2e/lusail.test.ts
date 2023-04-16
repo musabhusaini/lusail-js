@@ -58,6 +58,8 @@ const template = `
       url:
       - attribute: href
       - getBy: single
+      title:
+      - literal: Link to the thing
   pageTitle:
   - cssSelector: title
   - getBy: single
@@ -138,8 +140,16 @@ describe('Lusail', () => {
     const expectedResult = {
       pageTitle: 'Sample page',
       links: [
-        { name: 'Google', url: 'https://www.google.com' },
-        { name: 'Facebook', url: 'https://www.facebook.com' },
+        {
+          name: 'Google',
+          url: 'https://www.google.com',
+          title: 'Link to the thing',
+        },
+        {
+          name: 'Facebook',
+          url: 'https://www.facebook.com',
+          title: 'Link to the thing',
+        },
       ],
       specialTitle: 'Special Post 1',
       specialContent: 'This is the content of special post 1.',
