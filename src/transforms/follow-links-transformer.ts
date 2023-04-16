@@ -43,7 +43,7 @@ export default class FollowLinksTransformer extends Transformer<
       return await lusail.parseFromUrl(url);
     } catch (error: any) {
       this.options.logger.warn(
-        `Warning: Failed to fetch url ${url}: ${error}\n${error?.stack}`,
+        `Failed to fetch url ${url}: ${error}\n${error?.stack}`,
       );
       return undefined;
     }
