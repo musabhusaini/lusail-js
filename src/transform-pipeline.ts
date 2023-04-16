@@ -22,7 +22,9 @@ export class TransformPipeline {
         currentValues = await transformer.execute(currentValues, parentResult);
       } catch (error: any) {
         this.options.logger.warn(
-          `Warning: Error while performing transformation ${transform}: ${error}\n${error?.stack}`,
+          `Error while performing transformation ${JSON.stringify(
+            transform,
+          )}: ${error}\n${error?.stack}`,
         );
         throw error;
       }

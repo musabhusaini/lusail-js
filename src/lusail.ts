@@ -98,7 +98,7 @@ export class Lusail {
         }
       } catch (error: any) {
         this.options.logger.warn(
-          `Warning: Error in transformation pipeline for ${key}: ${error}\n${error.stack}`,
+          `Error in transformation pipeline for ${key}: ${error}\n${error.stack}`,
         );
       }
     }
