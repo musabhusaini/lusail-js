@@ -29,11 +29,10 @@ export default class ExtractFieldsTransformer extends Transformer<
     const { fields } = this.transform;
     const lusail = new Lusail(fields, this.options);
 
-    return isArray(input)
-      ? Promise.all(
-          input?.map((element) => this.transformElement(lusail, element)),
-        )
+    const resultPromise = isArray(input)
+      ? this.transformElementArray(lusail, input)
       : this.transformElement(lusail, input);
+    return await resultPromise;
   }
 
   private async transformElement(
@@ -48,6 +47,20 @@ export default class ExtractFieldsTransformer extends Transformer<
       );
       return undefined;
     }
+  }
+
+  private async transformElementArray(
+    lusail: Lusail,
+    elements: Element[],
+  ): Promise<LusailResult[]> {
+    const result: LusailResult[] = [];
+    for (const element of elements) {
+      const singleResult = await this.transformElement(lusail, element);
+      if (singleResult) {
+        result.push(singleResult);
+      }
+    }
+    return result;
   }
 }
 
