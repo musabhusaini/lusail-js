@@ -31,7 +31,7 @@ export default class FollowLinksTransformer extends Transformer<
     const lusail = new Lusail(followLinks, this.options);
 
     return isArray(input)
-      ? Promise.all(input.map((url) => this.transformElement(lusail, url)))
+      ? this.transformElementArray(lusail, input)
       : this.transformElement(lusail, input);
   }
 
@@ -49,6 +49,20 @@ export default class FollowLinksTransformer extends Transformer<
       );
       return undefined;
     }
+  }
+
+  private async transformElementArray(
+    lusail: Lusail,
+    urls: string[],
+  ): Promise<LusailResult[]> {
+    const result: LusailResult[] = [];
+    for (const url of urls) {
+      const singleResult = await this.transformElement(lusail, url);
+      if (singleResult) {
+        result.push(singleResult);
+      }
+    }
+    return result;
   }
 }
 
