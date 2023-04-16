@@ -43,12 +43,23 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
       case 'number':
         return toNumber(value?.trim?.());
       case 'boolean':
-        return value?.trim?.()?.toLowerCase?.() === 'true';
+        return this.toBoolean(value);
       case 'date':
         return parseISO(value?.trim?.());
       default:
         throw new Error(`Unsupported value type: ${type}`);
     }
+  }
+
+  private toBoolean(value?: string): boolean {
+    value = value?.trim?.().toLowerCase?.();
+    return (
+      value == 'true' ||
+      value == 't' ||
+      value == 'yes' ||
+      value == 'y' ||
+      value == '1'
+    );
   }
 }
 
