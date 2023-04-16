@@ -61,7 +61,7 @@ export class Lusail {
    */
   async parseFromString(html: string): Promise<LusailResult> {
     const dom = this.options.htmlDeserializer(html);
-    return this.parseFromElement(dom);
+    return await this.parseFromElement(dom);
   }
 
   /**
@@ -72,7 +72,7 @@ export class Lusail {
    */
   async parseFromUrl(url: string): Promise<LusailResult> {
     const html = await this.options.fetchFunction(url);
-    return this.parseFromString(html);
+    return await this.parseFromString(html);
   }
 
   /**
@@ -108,7 +108,7 @@ export class Lusail {
 
   private async defaultFetchFunction(url: string): Promise<string> {
     const response = await fetch(url);
-    return response.text();
+    return await response.text();
   }
 
   private defaultHtmlDeserializer(html: string): Element {
