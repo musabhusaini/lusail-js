@@ -14,7 +14,7 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
     transform: FieldTransform,
   ): transform is TypeCastTransform {
     return (
-      (transform.getBy ?? 'cast') == 'cast' &&
+      (transform.getBy ?? 'cast') === 'cast' &&
       !isUndefined((transform as TypeCastTransform).castTo)
     );
   }
@@ -51,11 +51,11 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
   private toBoolean(value?: string): boolean {
     value = value?.trim?.().toLowerCase?.();
     return (
-      value == 'true' ||
-      value == 't' ||
-      value == 'yes' ||
-      value == 'y' ||
-      value == '1'
+      value === 'true' ||
+      value === 't' ||
+      value === 'yes' ||
+      value === 'y' ||
+      value === '1'
     );
   }
 }
