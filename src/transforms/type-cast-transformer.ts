@@ -39,13 +39,13 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
   protected castValue(value: any, type: FieldType): any {
     switch (type) {
       case 'string':
-        return toString(value);
+        return toString(value)?.trim();
       case 'number':
-        return toNumber(value);
+        return toNumber(value?.trim?.());
       case 'boolean':
-        return value?.toLowerCase() === 'true';
+        return value?.trim?.()?.toLowerCase?.() === 'true';
       case 'date':
-        return parseISO(value);
+        return parseISO(value?.trim?.());
       default:
         throw new Error(`Unsupported value type: ${type}`);
     }

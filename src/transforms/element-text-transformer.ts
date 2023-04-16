@@ -15,7 +15,10 @@ export default class ElementTextTransformer extends Transformer<
   }
 
   async execute(input: Element | Element[]): Promise<string | string[]> {
-    return this.applyTransform(input, (element) => element?.textContent ?? '');
+    return this.applyTransform(
+      input,
+      (element) => element?.textContent?.trim() ?? '',
+    );
   }
 }
 
