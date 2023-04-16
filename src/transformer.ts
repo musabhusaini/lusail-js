@@ -7,7 +7,10 @@ export abstract class Transformer<
   I = any,
   O = any,
 > {
-  constructor(protected transform: T, protected options?: LusailOptions) {}
+  constructor(
+    protected transform: T,
+    protected options: Required<LusailOptions>,
+  ) {}
 
   abstract execute(
     input: I,

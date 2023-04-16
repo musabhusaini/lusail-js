@@ -42,10 +42,9 @@ export default class ExtractFieldsTransformer extends Transformer<
   ): Promise<LusailResult | undefined> {
     try {
       return lusail.parseFromElement(element);
-    } catch (error) {
-      this.options?.logger?.warn(
-        'Warning: Failed to extract fields from element: %s',
-        error,
+    } catch (error: any) {
+      this.options.logger.warn(
+        `Warning: Failed to extract fields from element: ${error}\n${error?.stack}`,
       );
       return undefined;
     }
