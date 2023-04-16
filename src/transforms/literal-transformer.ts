@@ -14,8 +14,8 @@ export default class LiteralTransformer extends Transformer<LiteralTransform> {
     );
   }
 
-  async execute(input: Element | Element[]): Promise<string | string[]> {
-    return this.applyTransform(input, () => this.transform.literal);
+  async execute(): Promise<string | string[]> {
+    return this.transform.literal;
   }
 }
 
