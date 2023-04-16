@@ -1,6 +1,6 @@
 {
   "name": "lusail",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "JavaScript implementation of Lusail, a domain-specific language for extracting structured data from HTML",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

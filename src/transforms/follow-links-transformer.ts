@@ -30,9 +30,10 @@ export default class FollowLinksTransformer extends Transformer<
     const { followLinks } = this.transform;
     const lusail = new Lusail(followLinks, this.options);
 
-    return isArray(input)
+    const resultPromise = isArray(input)
       ? this.transformElementArray(lusail, input)
       : this.transformElement(lusail, input);
+    return await resultPromise;
   }
 
   private async transformElement(
