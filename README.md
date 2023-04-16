@@ -1,5 +1,7 @@
 # lusail-js
 
+[![npm version](https://badge.fury.io/js/lusail.svg)](https://badge.fury.io/js/lusail) [![CI/CD Workflow](https://github.com/musabhusaini/lusail-js/actions/workflows/main.yaml/badge.svg)](https://github.com/musabhusaini/lusail-js/actions/workflows/main.yaml)
+
 JavaScript implementation of Lusail, a domain-specific language for extracting structured data from
 HTML.
 
