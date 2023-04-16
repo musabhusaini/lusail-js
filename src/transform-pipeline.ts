@@ -6,7 +6,7 @@ export class TransformPipeline {
   constructor(
     private element: Element,
     private pipeline: FieldTransform[],
-    private options?: LusailOptions,
+    private options: Required<LusailOptions>,
   ) {}
 
   async execute(parentResult: LusailResult = {}): Promise<any> {
@@ -20,11 +20,9 @@ export class TransformPipeline {
       );
       try {
         currentValues = await transformer.execute(currentValues, parentResult);
-      } catch (error) {
-        this.options?.logger?.warn(
-          'Warning: Error while performing transformation %s: %s',
-          transform,
-          error,
+      } catch (error: any) {
+        this.options.logger.warn(
+          `Warning: Error while performing transformation ${transform}: ${error}\n${error?.stack}`,
         );
         throw error;
       }
