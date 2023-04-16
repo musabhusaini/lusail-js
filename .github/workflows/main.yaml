@@ -121,10 +121,8 @@ jobs:
 
       - name: Merge release tag
         run: |
-          git fetch origin ${{ github.ref }}
-          # --allow-unrelated-histories is OK here because the fetch above is setting fetch depth to
-          # 1 by default.
-          git merge --allow-unrelated-histories --no-edit FETCH_HEAD
+          git fetch origin ${{ github.ref }} --unshallow
+          git merge --no-edit FETCH_HEAD
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

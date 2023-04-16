@@ -96,11 +96,9 @@ export class Lusail {
         if (value !== undefined) {
           result[key] = value;
         }
-      } catch (error) {
-        this.options.logger?.warn(
-          'Warning: Error in transformation pipeline for %s: %s',
-          key,
-          error,
+      } catch (error: any) {
+        this.options.logger.warn(
+          `Error in transformation pipeline for ${key}: ${error}\n${error.stack}`,
         );
       }
     }

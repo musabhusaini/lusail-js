@@ -29,12 +29,14 @@ const testHtml = `
       <p class="content">This is the content of post 1.</p>
       <p class="publishedAt">8 hours ago</p>
       <a href="http://link1.com"></a>
+      <span class="valid"> Yes </span>
     </div>
     <div class="post">
       <h2 class="title">Post 2</h2>
       <p class="content">This is the content of post 2.</p>
       <p class="publishedAt">2 days ago</p>
       <a href="http://link2.com"></a>
+      <span class="valid">No</span>
     </div>
     <div class="special">
       <h2 class="title">Special Post 1</h2>
@@ -103,6 +105,11 @@ const template = `
       - getBy: text
       - castTo: date
         format: timeAgo
+      valid:
+      - cssSelector: .valid
+      - index: 0
+      - getBy: text
+      - castTo: boolean
       links:
       - cssSelector: a
       - getBy: single
@@ -144,6 +151,7 @@ describe('Lusail', () => {
           content: 'This is the content of post 1.',
           publishedAt: subHours(referenceDate, 8),
           subTitle: 'Link 1',
+          valid: true,
         },
         {
           title: 'Post 2',
@@ -151,6 +159,7 @@ describe('Lusail', () => {
           content: 'This is the content of post 2.',
           publishedAt: subDays(referenceDate, 2),
           subTitle: 'Link 2',
+          valid: false,
         },
       ],
     };

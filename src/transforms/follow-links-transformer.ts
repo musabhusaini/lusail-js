@@ -31,7 +31,7 @@ export default class FollowLinksTransformer extends Transformer<
     const lusail = new Lusail(followLinks, this.options);
 
     return isArray(input)
-      ? Promise.all(input.map((url) => this.transformElement(lusail, url)))
+      ? this.transformElementArray(lusail, input)
       : this.transformElement(lusail, input);
   }
 
@@ -40,15 +40,27 @@ export default class FollowLinksTransformer extends Transformer<
     url: string,
   ): Promise<LusailResult | undefined> {
     try {
-      return lusail.parseFromUrl(url);
-    } catch (error) {
-      this.options?.logger?.warn(
-        'Warning: Failed to fetch url %s: %s',
-        url,
-        error,
+      return await lusail.parseFromUrl(url);
+    } catch (error: any) {
+      this.options.logger.warn(
+        `Failed to fetch url ${url}: ${error}\n${error?.stack}`,
       );
       return undefined;
     }
+  }
+
+  private async transformElementArray(
+    lusail: Lusail,
+    urls: string[],
+  ): Promise<LusailResult[]> {
+    const result: LusailResult[] = [];
+    for (const url of urls) {
+      const singleResult = await this.transformElement(lusail, url);
+      if (singleResult) {
+        result.push(singleResult);
+      }
+    }
+    return result;
   }
 }
 

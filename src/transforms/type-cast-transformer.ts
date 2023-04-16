@@ -14,7 +14,7 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
     transform: FieldTransform,
   ): transform is TypeCastTransform {
     return (
-      (transform.getBy ?? 'cast') == 'cast' &&
+      (transform.getBy ?? 'cast') === 'cast' &&
       !isUndefined((transform as TypeCastTransform).castTo)
     );
   }
@@ -24,12 +24,9 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
     return this.applyTransform(input, (value) => {
       try {
         return this.castValue(value, valueType);
-      } catch (error) {
-        this.options?.logger?.warn(
-          'Warning: Failed to cast value %s to %s: %s',
-          value,
-          valueType,
-          error,
+      } catch (error: any) {
+        this.options.logger.warn(
+          `Failed to cast value ${value} to ${valueType}: ${error}\n${error?.stack}`,
         );
         return undefined;
       }
@@ -39,16 +36,27 @@ export default class TypeCastTransformer<I = any, O = any> extends Transformer<
   protected castValue(value: any, type: FieldType): any {
     switch (type) {
       case 'string':
-        return toString(value);
+        return toString(value)?.trim();
       case 'number':
-        return toNumber(value);
+        return toNumber(value?.trim?.());
       case 'boolean':
-        return value?.toLowerCase() === 'true';
+        return this.toBoolean(value);
       case 'date':
-        return parseISO(value);
+        return parseISO(value?.trim?.());
       default:
         throw new Error(`Unsupported value type: ${type}`);
     }
+  }
+
+  private toBoolean(value?: string): boolean {
+    value = value?.trim?.().toLowerCase?.();
+    return (
+      value === 'true' ||
+      value === 't' ||
+      value === 'yes' ||
+      value === 'y' ||
+      value === '1'
+    );
   }
 }
 

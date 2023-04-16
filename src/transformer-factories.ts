@@ -5,7 +5,7 @@ import { Transformer } from './transformer';
 
 export type TransformerFactory = (
   transform: FieldTransform,
-  options?: LusailOptions,
+  options: Required<LusailOptions>,
 ) => Transformer | undefined;
 
 interface RegisteredFactory {
@@ -26,7 +26,10 @@ export class TransformerFactories {
     this.factories.push({ factory, precedence });
   }
 
-  create(transform: FieldTransform, options?: LusailOptions): Transformer {
+  create(
+    transform: FieldTransform,
+    options: Required<LusailOptions>,
+  ): Transformer {
     const matches = this.factories
       .map(({ factory, precedence }) => ({
         transform: factory(transform, options),
