@@ -86,17 +86,27 @@ export interface DateTransform extends TypeCastTransform {
 }
 
 /**
- * Represents a transform that applies a regex pattern and optional replacement to a value.
+ * Represents a transform that applies a regular expression pattern and optional replacement to the
+ * input value.
  */
 export interface RegexTransform extends FieldTransform<'regex'> {
   /**
-   * The regex pattern to apply.
+   * The regular expression pattern to apply. Uses [JavaScript regular expressions](
+   *  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions
+   * ).
    */
   regex: string | RegExp;
   /**
-   * The string to replace matched patterns with.
+   * The string to replace matched patterns with. Uses [JavaScript substitution syntax](
+   *  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+   * ).
    */
   replaceWith?: string;
+  /**
+   * Whether to require the regular expression to match the input pattern. If this is set to `true`,
+   * and the input string value does not match the pattern, the output will be an empty string.
+   */
+  requireMatch?: boolean;
 }
 
 /**

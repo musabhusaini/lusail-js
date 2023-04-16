@@ -224,6 +224,7 @@ Applies a regular expression substitution to the input value(s).
 | `getBy` | Explicitly triggers this transform | No | `regex` |
 | `regex` | The regex pattern to apply | Yes | - |
 | `replaceWith` | The string to replace matched patterns with | No | `'$1'` |
+| `requireMatch` | Whether to pass the input value if it does not match the pattern | No | `false` |
 
 ### Extract Fields
 
