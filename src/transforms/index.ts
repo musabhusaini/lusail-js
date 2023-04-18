@@ -11,6 +11,7 @@ export * from './range-transformer';
 export * from './regex-transformer';
 export * from './single-transformer';
 export * from './type-cast-transformer';
+export * from './existence-transformer';
 
 export function registerAll() {
   // Actual registration of transforms takes place inside each transform file, but importing this
