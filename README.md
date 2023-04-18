@@ -19,26 +19,34 @@ HTML.
 ## What is Lusail?
 
 Lusail is an extensible domain-specific language designed to make it easy to express the structure
-of the data that needs to be extracted from an HTML document.
+of the data that needs to be extracted from an HTML document. It relies on a combination of field
+definitions and transformation pipelines to dictate data extraction and processing for each field.
+The transforms within a pipeline process input data sequentially, with each transform receiving the
+output of its predecessor, applying its specific logic, and then passing the result to the
+subsequent transform.
 
-A Lusail template can be defined in any format that can be converted to a JavaScript object, and
-consists of a series of field definitions and transformation pipelines that guide the extraction
-process.
-
-Here's a simple example of a Lusail template in YAML notation:
+A Lusail template can be defined using any object notation. Here's a simple example of a Lusail
+template in YAML:
 
 ```yaml
+# Get the text content of the first element matching the CSS selector "title" and assign it to the
+# field "pageTitle".
 pageTitle:
   - cssSelector: title
   - get: single
   - get: text
+# Get the text content of the first element matching the CSS selector ".description" and assign it
+# to the field "pageDescription".
 pageDescription:
   - cssSelector: .description
   - get: single
   - get: text
+# Get all the href attributes of elements matching the CSS selector "body > a" and assign the
+# resulting array to the "links" field.
 links:
   - cssSelector: "body > a"
   - attribute: href
+# Get all elements matching the CSS selector ".post" and extract certain fields from each.
 posts:
   - cssSelector: .post
   - fields:
@@ -51,10 +59,6 @@ posts:
         - get: single
         - get: text
 ```
-
-The above example instructs the parser to find HTML elements matching the css selector `.title`,
-extract the first of such elements, and get its text content, and assign it to the property
-`pageTitle` of the output.
 
 Now consider this HTML document:
 
@@ -100,7 +104,6 @@ This library is a TypeScript/JavaScript parser for the Lusail language.
 ``` sh
 npm install --save lusail
 ```
-
 
 ## Usage
 
@@ -243,7 +246,7 @@ Follows links from input strings and extracts fields given by a sub-template.
 
 | Property | Description | Required | Default / required value |
 | - | - | - | - |
-| `getBy` |	Explicitly triggers this transform | No | `followingLinks`, `followLinks`, or `links` |
+| `getBy` | Explicitly triggers this transform | No | `followingLinks`, `followLinks`, or `links` |
 | `followLinks` | The LusailTemplate to apply to the linked content | Yes | - |
 
 ### Literal
@@ -262,6 +265,17 @@ Hoists nested fields to the top level of the result
 | Property | Description | Required | Default / required value |
 | - | - | - | - |
 | `getBy` | Triggers this transform | Yes | `hoist` or `hoisting` |
+
+### Existence
+
+Determines whether the value transformed up to this point exists or not. Existence is determined by
+truthiness. If the value is an array, then existence is determined by the existence of a truthy
+value in the array.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `existence` or `exists` |
+| `exists` | Whether to check for existence (`true`) or absence (`false`) | No | `true` |
 
 ## Adding Custom Transforms
 

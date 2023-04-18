@@ -64,6 +64,22 @@ const template = `
   - cssSelector: title
   - getBy: single
   - getBy: text
+  isSpecial:
+  - cssSelector: .special
+  - index: 0
+  - exists: true
+  isNotSpecial:
+  - cssSelector: .special
+  - exists: false
+  isOrdinary:
+  - cssSelector: .ordinary
+  - exists: true
+  isNotOrdinary:
+  - cssSelector: .ordinary
+  - exists: false
+  hasPosts:
+  - cssSelector: .post
+  - exists: true
   special:
   - cssSelector: .special
   - getBy: single
@@ -151,6 +167,11 @@ describe('Lusail', () => {
           title: 'Link to the thing',
         },
       ],
+      isSpecial: true,
+      isNotSpecial: false,
+      isOrdinary: false,
+      isNotOrdinary: true,
+      hasPosts: true,
       specialTitle: 'Special Post 1',
       specialContent: 'This is the content of special post 1.',
       specialDate: parse('02/03/2021 13:05', 'MM/dd/yyyy HH:mm', new Date()),

@@ -147,3 +147,15 @@ export interface LiteralTransform extends FieldTransform<'literal'> {
 export interface HoistTransform extends FieldTransform<'hoist' | 'hoisting'> {
   getBy: 'hoist' | 'hoisting';
 }
+
+/**
+ * Represents a transform that outputs a boolean value based on whether the input value is defined
+ * (truthy) or not.
+ */
+export interface ExistenceTransform
+  extends FieldTransform<'existence' | 'exists'> {
+  /**
+   * Whether the input value is expected to be defined or not. Defaults to `true`.
+   */
+  exists?: boolean;
+}
