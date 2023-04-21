@@ -43,6 +43,9 @@ const testHtml = `
       <p class="content">This is the content of special post 1.</p>
       <p class="publishedAt">02/03/2021 13:05</p>
     </div>
+    <div class="type">Simplified</div>
+    <div class="type">Simp</div>
+    <div class="generator">New</div>
   </body>
 </html>
 `;
@@ -138,6 +141,20 @@ const template = `
           - getBy: single
           - getBy: text
       - getBy: hoisting
+  type:
+  - cssSelector: '.type'
+  - getBy: text
+  - map:
+      Simple: simple
+      simplified: simple
+      Simplified: simple
+  generator:
+  - cssSelector: '.generator'
+  - index: 0
+  - getBy: text
+  - map:
+      Syn: synthetic
+    strict: true
 `;
 
 describe('Lusail', () => {
@@ -193,6 +210,8 @@ describe('Lusail', () => {
           valid: false,
         },
       ],
+      type: ['simple', 'Simp'],
+      generator: null,
     };
 
     console.log(result);
