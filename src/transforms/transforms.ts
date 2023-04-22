@@ -159,3 +159,19 @@ export interface ExistenceTransform
    */
   exists?: boolean;
 }
+
+/**
+ * Represents a transform that converts input value(s) to other value(s) based on the provided
+ * mapping.
+ */
+export interface MapTransform extends FieldTransform<'map' | 'mapping'> {
+  /**
+   * The map of values to use for the transformation.
+   */
+  map: Record<any, any>;
+  /**
+   * Whether to allow input values through if they do not match any of the keys in the map. If set
+   * to `true`, the incoming value will be replaced by `null`.
+   */
+  strict?: boolean;
+}
