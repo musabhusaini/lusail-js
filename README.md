@@ -97,7 +97,7 @@ Applying the above template to the given HTML document will produce:
 }
 ```
 
-This library is a TypeScript/JavaScript parser for the Lusail language.
+This library is a JavaScript parser for the Lusail language.
 
 ## Installation
 
@@ -107,7 +107,7 @@ npm install --save lusail
 
 ## Usage
 
-Create a `Lusail` instance by passing in a template as a JavaScript or TypeScript object:
+Create a `Lusail` instance by passing in a template as a JavaScript object:
 
 ```ts
 import { Lusail, LusailTemplate } from 'lusail';
