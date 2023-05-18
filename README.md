@@ -277,6 +277,16 @@ value in the array.
 | `getBy` | Explicitly triggers this transform | No | `existence` or `exists` |
 | `exists` | Whether to check for existence (`true`) or absence (`false`) | No | `true` |
 
+### Map
+
+Replaces incoming values with new values using a key/value map.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `map` or `mapping` |
+| `map` | The map to use for the conversion | Yes | - |
+| `strict` | Whether to allow unmatched values to pass | No | `false` |
+
 ## Adding Custom Transforms
 
 Lusail-js allows you to extend its functionality by registering custom transformations. These
