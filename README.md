@@ -97,7 +97,7 @@ Applying the above template to the given HTML document will produce:
 }
 ```
 
-This library is a TypeScript/JavaScript parser for the Lusail language.
+This library is a JavaScript parser for the Lusail language.
 
 ## Installation
 
@@ -107,7 +107,7 @@ npm install --save lusail
 
 ## Usage
 
-Create a `Lusail` instance by passing in a template as a JavaScript or TypeScript object:
+Create a `Lusail` instance by passing in a template as a JavaScript object:
 
 ```ts
 import { Lusail, LusailTemplate } from 'lusail';
@@ -276,6 +276,16 @@ value in the array.
 | - | - | - | - |
 | `getBy` | Explicitly triggers this transform | No | `existence` or `exists` |
 | `exists` | Whether to check for existence (`true`) or absence (`false`) | No | `true` |
+
+### Map
+
+Replaces incoming values with new values using a key/value map.
+
+| Property | Description | Required | Default / required value |
+| - | - | - | - |
+| `getBy` | Explicitly triggers this transform | No | `map` or `mapping` |
+| `map` | The map to use for the conversion | Yes | - |
+| `strict` | Whether to allow unmatched values to pass | No | `false` |
 
 ## Adding Custom Transforms
 
